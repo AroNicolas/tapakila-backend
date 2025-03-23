@@ -1,3 +1,7 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Reservation } from "./Reservation";
+import { TicketType } from "./TicketType";
+
 @Entity()
 export class ReservationTicket {
     @PrimaryGeneratedColumn("uuid")
