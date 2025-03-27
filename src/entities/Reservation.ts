@@ -9,7 +9,7 @@ export class Reservation {
     id_reservation: string;
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-    reservation_date: Date;
+    reserved_at: Date;
 
     @Column({ type: "enum", enum: ReservationStatus, default: ReservationStatus.CONFIRMED })
     status: ReservationStatus;
