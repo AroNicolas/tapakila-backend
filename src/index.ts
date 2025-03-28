@@ -4,6 +4,7 @@ import { AppDataSource } from "./config/database";
 import authRoutes from "./routes/auth.routes";
 import eventRoutes from "./routes/user/user.event.routes";
 import accountRoutes from "./routes/user/user.account.routes";
+import reservationRoutes from "./routes/user/user.reservation.routes";
 
 const app = express();
 app.use(express.json());
@@ -20,3 +21,4 @@ AppDataSource.initialize()
 app.use("/", authRoutes);
 app.use("/api", eventRoutes);
 app.use("/api", accountRoutes);
+app.use("/api", reservationRoutes);
