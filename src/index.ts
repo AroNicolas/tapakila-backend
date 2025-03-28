@@ -19,6 +19,10 @@ AppDataSource.initialize()
   .catch((error) => console.error("Erreur de connexion à la base de données :", error));
 
 app.use("/", authRoutes);
-app.use("/api", eventRoutes);
-app.use("/api", accountRoutes);
-app.use("/api", reservationRoutes);
+
+//User side
+app.use("/api/user", eventRoutes);
+app.use("/api/user", accountRoutes);
+app.use("/api/user", reservationRoutes);
+
+//Admin side
