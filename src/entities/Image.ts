@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn} from "typeorm";
 import { Event } from "./Event";
 
 @Entity()
@@ -9,6 +9,7 @@ export class Image {
   @Column("text")
   url: string;
 
-  @ManyToOne(() => Event, (event) => event.id_event, { onDelete: "CASCADE" })
+  @OneToOne(() => Event, (event) => event.image) // specify inverse side as a second parameter
+  @JoinColumn()
   event: Event;
 }

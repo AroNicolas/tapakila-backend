@@ -1,0 +1,100 @@
+import { AppDataSource } from "../../config/database";
+import { Event } from "../../entities/Event";
+import { TicketType } from "../../entities/TicketType";
+import { Image } from "../../entities/Image";
+import { EventStatus } from "../../entities/EnventStatus";
+
+export class EventService {
+  static async getAllEvents(page: number, limit: number) {
+    return await AppDataSource.getRepository(Event)
+      .createQueryBuilder("event")
+      .leftJoinAndSelect("event.ticket_type", "ticket")
+      .leftJoinAndSelect("event.image", "image")
+      .orderBy("event.event_date", "DESC")
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getMany();
+  }
+
+  static async getEventById(id: string) {
+    return await AppDataSource.getRepository(Event)
+      .createQueryBuilder("event")
+      .leftJoinAndSelect("event.ticket_type", "ticket")
+      .leftJoinAndSelect("event.image", "image")
+      .where("event.id = :id", { id })
+      .getOne();
+  }
+
+  static async getFilteredEvents(page: number, limit: number, date?: string, location?: string, category?: string) {
+    const query = AppDataSource.getRepository(Event)
+      .createQueryBuilder("event")
+      .leftJoinAndSelect("event.ticket_type", "ticket")
+      .leftJoinAndSelect("event.image", "image");
+
+    if (date) query.andWhere("event.event_date = :date", { date });
+    if (location) query.andWhere("LOWER(event.location) LIKE LOWER(:location)", { location: `%${location}%` });
+    if (category) query.andWhere("event.category = :category", { category });
+
+    return await query.orderBy("event.event_date", "ASC").skip((page - 1) * limit).take(limit).getMany();
+  }
+
+  static async searchEventByTitle(title: string) {
+    return await AppDataSource.getRepository(Event)
+      .createQueryBuilder("event")
+      .leftJoinAndSelect("event.ticket_type", "ticket")
+      .leftJoinAndSelect("event.image", "image")
+      .where("LOWER(event.title) LIKE LOWER(:title)", { title: `%${title}%` })
+      .getMany();
+  }
+
+  static async createEvent(eventData: Partial<Event> & { image?: { url: string } }): Promise<Event> {
+    const eventRepository = AppDataSource.getRepository(Event);
+    const imageRepository = AppDataSource.getRepository(Image);
+  
+    // Création de l'événement sans l'image
+    const newEvent = eventRepository.create(eventData);
+    await eventRepository.save(newEvent);
+  
+    // Ajout de l'image si elle existe
+    if (eventData.image) {
+      // Crée l'image et associe-la à l'événement
+      const image = imageRepository.create({ url: eventData.image.url, event: newEvent });
+      await imageRepository.save(image);
+      newEvent.image = image; // Associer l'image à l'événement
+    }
+  
+    return newEvent;
+  }
+
+  static async updateEvent(id: string, updatedData: Partial<Event>): Promise<Event | null> {
+    const eventRepository = AppDataSource.getRepository(Event);
+    const event = await eventRepository.findOne({ where: { id_event: id } });
+
+    if (!event) return null;
+
+    Object.assign(event, updatedData);
+    return await eventRepository.save(event);
+  }
+
+  static async deleteEvent(id: string): Promise<boolean> {
+    const eventRepository = AppDataSource.getRepository(Event);
+    const deleteResult = await eventRepository.delete(id);
+    return (deleteResult.affected ?? 0) > 0;
+  }
+
+  static async updateEventStatus(id: string, status: EventStatus): Promise<Event | null> {
+    const eventRepository = AppDataSource.getRepository(Event);
+    const event = await eventRepository.findOne({ where: { id_event: id } });
+
+    if (!event) return null;
+
+    event.status = status;
+    return await eventRepository.save(event);
+  }
+
+  static async createTicketType(id: string, ticketData: Partial<TicketType>): Promise<TicketType> {
+    const ticketRepository = AppDataSource.getRepository(TicketType);
+    const newTicket = ticketRepository.create({ ...ticketData, event: { id_event: id } });
+    return await ticketRepository.save(newTicket);
+  }
+}

@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne} from "typeorm";
 import { EventCategory } from "./EventCategory";
 import { EventStatus } from "./EnventStatus";
+import { Image } from "./Image"; 
 
 @Entity()
 export class Event {
@@ -27,5 +28,7 @@ export class Event {
 
   @Column({ type: "enum", enum: EventStatus, default: EventStatus.DRAFT })
   status: EventStatus;
-  
+
+  @OneToOne(() => Image, (image) => image.event, {cascade: true})
+  image: Image;  
 }
