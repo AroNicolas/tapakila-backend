@@ -1,38 +1,29 @@
-import jwt from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
-import { UserRole } from '../entities/UserRole';
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { UserRole } from "../entities/UserRole";
 
-const authMiddleware = (requiredRole: UserRole) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    // Vérifier le token dans l'entête Authorization
+export const authMiddleware = (requiredRole: UserRole) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     const token = req.headers.authorization?.split(" ")[1]; // "Bearer <token>"
 
     if (!token) {
-      return res.status(401).json({ message: "Accès non autorisé, token manquant." });
+      res.status(401).json({ message: "Accès non autorisé, token manquant." });
+      return;
     }
 
     try {
-      // Décoder le token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id_account: string; role: UserRole };
 
-      // Attacher l'utilisateur décodé à la requête
       req.user = decoded;
 
-      // Vérifier le rôle de l'utilisateur selon la route
-      if (requiredRole === UserRole.ADMIN && UserRole.ADMIN) {
-        return res.status(403).json({ message: "Accès interdit, rôle d'administrateur requis." });
-      }
-
-      // Si 'user', tout le monde est autorisé
-      if (requiredRole === UserRole.USER && ( req.user.role === UserRole.USER || req.user.role === UserRole.USER)) {
-        return next();
+      if (requiredRole === UserRole.ADMIN && req.user.role !== UserRole.ADMIN) {
+        res.status(403).json({ message: "Accès interdit, rôle d'administrateur requis." });
+        return;
       }
 
       next();
     } catch (error) {
-      return res.status(403).json({ message: "Token invalide." });
+      res.status(403).json({ message: "Token invalide." });
     }
   };
 };
-
-export default authMiddleware;

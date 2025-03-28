@@ -12,7 +12,7 @@ export class EventController {
     }
   }
 
- static async getEventById(req: Request, res: Response): Promise<void> {
+  static async getEventById(req: Request, res: Response): Promise<void> {
     try {
       const { id_event } = req.params;
       const event = await EventService.getEventById(id_event);

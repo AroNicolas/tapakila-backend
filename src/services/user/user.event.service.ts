@@ -30,7 +30,7 @@ export class EventService {
       .leftJoinAndSelect("event.image", "image");
 
     if (date) query.andWhere("event.event_date = :date", { date });
-    if (location) query.andWhere("event.location = :location", { location });
+    if (location) query.andWhere("LOWER(event.location) LIKE LOWER(:location)", { location: `%${location}%` });
     if (category) query.andWhere("event.category = :category", { category });
 
     return await query.orderBy("event.event_date", "ASC").skip((page - 1) * limit).take(limit).getMany();
