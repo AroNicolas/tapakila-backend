@@ -7,6 +7,7 @@ import userAccountRoutes from "./routes/user/user.account.routes";
 import userReservationRoutes from "./routes/user/user.reservation.routes";
 import adminEventRoutes from "./routes/admin/admin.event.routes"
 import adminAccountRoutes from "./routes/admin/admin.account.routes";
+import adminReservationRoutes from "./routes/admin/admin.reservation.routes";
 
 const app = express();
 app.use(express.json());
@@ -30,3 +31,4 @@ app.use("/api/user", userReservationRoutes);
 //Admin side
 app.use("/api/admin", adminEventRoutes);
 app.use("/api/admin", adminAccountRoutes);
+app.use("/api/admin", adminReservationRoutes);
