@@ -32,9 +32,15 @@ export class EventController {
 
   static async getFilteredEvents(req: Request, res: Response) {
     try {
-      const { date, location, category } = req.params;
-      const { page, limit } = req.query;
-      const events = await EventService.getFilteredEvents(Number(page), Number(limit), date, location, category);
+      const { date, location, category } = req.query;
+      const page = parseInt(req.query.page as string, 10) || 1;
+      const limit = parseInt(req.query.limit as string, 10) || 10;
+  
+      const events = await EventService.getFilteredEvents(page, limit, {
+        location: location as string,
+        date: date as string,
+        category: category as string
+      });
       res.json(events);
     } catch (error) {
       res.status(500).json({ message: "Erreur interne du serveur" });

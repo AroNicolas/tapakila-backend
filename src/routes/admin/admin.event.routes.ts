@@ -8,7 +8,7 @@ const router = Router();
 
 router.get("/event", EventController.getAllEvents);
 router.get("/event/:id", EventController.getEventById);
-router.get("/event/:date?/:location?/:category?", EventController.getFilteredEvents);
+router.get("/event", EventController.getFilteredEvents);
 router.get("/event/:title", EventController.searchEventByTitle);
 router.post("/event", authMiddleware(UserRole.ADMIN), upload.array("image"), EventController.createEvent);
 router.put("/event/:id", authMiddleware(UserRole.ADMIN), EventController.updateEvent);

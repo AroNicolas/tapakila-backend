@@ -25,17 +25,17 @@ export class EventService {
       .getOne();
   }
 
-  static async getFilteredEvents(page: number, limit: number, date?: string, location?: string, category?: string) {
+  static async getFilteredEvents(page: number, limit: number, filters: { date?: string; location?: string; category?: string }) {
     const query = AppDataSource.getRepository(Event)
       .createQueryBuilder("event")
       .leftJoinAndSelect("event.ticket_type", "ticket")
-      .leftJoinAndSelect("event.image", "image");
-
-    if (date) query.andWhere("event.event_date = :date", { date });
-    if (location) query.andWhere("LOWER(event.location) LIKE LOWER(:location)", { location: `%${location}%` });
-    if (category) query.andWhere("event.category = :category", { category });
-
-    return await query.orderBy("event.event_date", "ASC").skip((page - 1) * limit).take(limit).getMany();
+      .leftJoinAndSelect("event.image", "image")
+  
+    if (filters.date) query.andWhere("DATE(event.event_date) = :date", { date: filters.date });
+    if (filters.location) query.andWhere("LOWER(event.location) LIKE LOWER(:location)", { location: `%${filters.location}%` });
+    if (filters.category) query.andWhere("event.category = :category", { category: filters.category });
+  
+    return await query.orderBy("event.event_date", "DESC").skip((page - 1) * limit).take(limit).getMany();
   }
 
   static async searchEventByTitle(title: string) {
