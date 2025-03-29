@@ -41,4 +41,20 @@ export class EventController {
       res.status(500).json({ message: "Erreur interne du serveur" });
     }
   }
+
+  static async getAllLocations(req: Request, res: Response): Promise<void> { 
+    try {
+      const locations = await EventService.getAllLocations();
+  
+      if (locations.length === 0) { 
+        res.status(404).json({ message: "Aucun lieu trouvé" });
+      }
+  
+      res.json(locations);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des lieux :", error);
+      res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+  }
+  
 }

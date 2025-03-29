@@ -29,4 +29,14 @@ export class EventService {
     const [events, total] =  await query.orderBy("event.event_date", "ASC").skip((page - 1) * limit).take(limit).getManyAndCount();
     return [events, total];
   }
+
+  static async getAllLocations(): Promise<string[]> {
+    const result = await AppDataSource.getRepository(Event)
+      .createQueryBuilder("event")
+      .select("DISTINCT event.location", "location")
+      .orderBy("event.location", "ASC")
+      .getRawMany();
+  
+    return result.map(row => row.location);
+  }
 }
