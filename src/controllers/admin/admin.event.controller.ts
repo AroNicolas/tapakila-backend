@@ -61,7 +61,7 @@ export class EventController {
       const imageFile = req.file; // Récupérer l'image envoyée via `multer`
 
       // Construire l'objet image avec l'url du fichier téléchargé (si un fichier est envoyé)
-      const image = imageFile ? { url: `src/uploads/${imageFile.filename}` } as Image & { url: string } : undefined;
+      const image = imageFile ? { url: `uploads/${imageFile.filename}` } as Image & { url: string } : undefined;
 
       // Appeler le service avec les données de l'événement et l'image
       const event = await EventService.createEvent({

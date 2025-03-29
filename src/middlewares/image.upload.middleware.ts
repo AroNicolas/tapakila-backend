@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "src/uploads/");
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = uuidv4();

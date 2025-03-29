@@ -9,7 +9,7 @@ const router = Router();
 router.get("/event/:id", EventController.getEventById);
 router.get("/event", EventController.getAllOrFilteredEvents);
 router.get("/event/:title", EventController.searchEventByTitle);
-router.post("/event", authMiddleware(UserRole.ADMIN), upload.array("image"), EventController.createEvent);
+router.post("/event", authMiddleware(UserRole.ADMIN), upload.single("image"), EventController.createEvent);
 router.put("/event/:id", authMiddleware(UserRole.ADMIN), EventController.updateEvent);
 router.delete("/event/:id", authMiddleware(UserRole.ADMIN), EventController.deleteEvent);
 router.patch("/event/:id/:status", authMiddleware(UserRole.ADMIN), EventController.updateEventStatus);
