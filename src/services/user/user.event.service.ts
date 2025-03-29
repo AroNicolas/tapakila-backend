@@ -1,6 +1,7 @@
 import { AppDataSource } from "../../config/database";
 import { EventStatus } from "../../entities/EnventStatus";
 import { Event } from "../../entities/Event";
+import { EventCategory } from "../../entities/EventCategory";
 
 export class EventService {
   static async getEventById(id_event: string) {
@@ -38,5 +39,9 @@ export class EventService {
       .getRawMany();
   
     return result.map(row => row.location);
+  }
+  
+  static async getAllCategories(): Promise<string[]> {
+    return Object.values(EventCategory);
   }
 }

@@ -57,4 +57,19 @@ export class EventController {
     }
   }
   
+  static async getAllCategories(req: Request, res: Response): Promise<void> { 
+    try {
+      const categories = await EventService.getAllCategories();
+  
+      if (categories.length === 0) { 
+        res.status(404).json({ message: "Aucune catégorie trouvé" });
+      }
+  
+      res.json(categories);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des catégories :", error);
+      res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+  }
+  
 }
