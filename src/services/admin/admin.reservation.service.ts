@@ -4,7 +4,7 @@ import { ReservationStatus } from "../../entities/ReservationStatus";
 
 export class ReservationService {
   static async getReservationsByEvent(id: string, page: number, limit: number) {
-    return await AppDataSource.getRepository(Reservation)
+    const query = AppDataSource.getRepository(Reservation)
       .createQueryBuilder("reservation")
       .leftJoinAndSelect("reservation.event", "event")
       .leftJoinAndSelect("reservation.account", "account")
@@ -13,8 +13,10 @@ export class ReservationService {
       .where("event.id_event = :id", { id })
       .orderBy("reservation.reserved_at", "DESC")
       .skip((page - 1) * limit)
-      .take(limit)
-      .getMany();
+      .take(limit);
+
+    const [reservations, total] = await query.getManyAndCount();  // getManyAndCount renvoie [data, totalCount]
+    return [reservations, total];  // Données + Total
   }
 
   static async cancelReservation(id: string) {

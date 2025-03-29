@@ -18,36 +18,43 @@ export class AccountController {
     }
   }
 
-  static async getPastReservations(req: Request, res: Response): Promise<void> {
-    try {
-      const { id_account } = req.user!;
-      const reservations = await AccountService.getPastReservations(id_account);
-
-      res.json(reservations);
-    } catch (error) {
-      res.status(500).json({ message: "Erreur interne du serveur" });
-    }
-  }
-
-  static async getFutureReservations(req: Request, res: Response): Promise<void> {
-    try {
-      const { id_account } = req.user!;
-      const reservations = await AccountService.getFutureReservations(id_account);
-
-      res.json(reservations);
-    } catch (error) {
-      res.status(500).json({ message: "Erreur interne du serveur" });
-    }
-  }
-
   static async getFilteredPastReservations(req: Request, res: Response): Promise<void> {
     try {
       const { id_account } = req.user!;
-      const { date, location, category } = req.params;
+      const { date, location, category } = req.query;
 
-      const filteredReservations = await AccountService.getFilteredPastReservations(id_account, { date, location, category });
+      const filters = {
+        location: location ? (location as string) : undefined,
+        date: date ? (date as string) : undefined,
+        category: category ? (category as string) : undefined,
+      };
 
-      res.json(filteredReservations);
+      const [reservations, total] = await AccountService.getFilteredPastReservations(id_account, filters);
+      res.json({
+        data: reservations,
+        total: total
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+  }
+  
+  static async getFilteredFutureReservations(req: Request, res: Response): Promise<void> {
+    try {
+      const { id_account } = req.user!;
+      const { date, location, category } = req.query;
+
+      const filters = {
+        location: location ? (location as string) : undefined,
+        date: date ? (date as string) : undefined,
+        category: category ? (category as string) : undefined,
+      };
+
+      const [reservations, total] = await AccountService.getFilteredFutureReservations(id_account, filters);
+      res.json({
+        data: reservations,
+        total: total
+      });
     } catch (error) {
       res.status(500).json({ message: "Erreur interne du serveur" });
     }

@@ -4,19 +4,21 @@ import { UserRole } from "../../entities/UserRole";
 
 export class AccountService {
   static async getAllUsers(page: number, limit: number) {
-    return await AppDataSource.getRepository(Account)
+    const query = AppDataSource.getRepository(Account)
       .createQueryBuilder("account")
       .orderBy("account.name", "ASC")
       .skip((page - 1) * limit)
       .take(limit)
-      .getMany();
+
+    const [accounts, total] = await query.getManyAndCount();  // getManyAndCount renvoie [data, totalCount]
+    return [accounts, total];
   }
 
   static async getUserByName(name: string) {
     return await AppDataSource.getRepository(Account)
       .createQueryBuilder("user")
       .where("LOWER(user.name) LIKE LOWER(:name)", { name: `%${name}%` })
-      .getOne();
+      .getMany();
   }
 
   static async setUserRole(id: string, role: UserRole) {

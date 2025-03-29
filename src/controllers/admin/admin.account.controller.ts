@@ -7,8 +7,11 @@ export class AccountController {
     try {
       const { page, limit } = req.query;
       
-      const users = await AccountService.getAllUsers(Number(page), Number(limit));
-      res.json(users);
+      const [accounts, total] = await AccountService.getAllUsers(Number(page), Number(limit));
+      res.json({
+        data: accounts,
+        total: total
+      });
     } catch (error) {
       console.error("Erreur lors de la récupération des utilisateurs :", error);
       res.status(500).json({ message: "Erreur interne du serveur" });

@@ -7,8 +7,12 @@ export class ReservationController {
       const { id } = req.params;
       const { page, limit } = req.query;
 
-      const reservations = await ReservationService.getReservationsByEvent(id, Number(page), Number(limit));
-      res.json(reservations);
+      const [reservations, total] = await ReservationService.getReservationsByEvent(id, Number(page), Number(limit));
+      res.json({
+        data: reservations,
+        total: total
+      });
+
     } catch (error) {
       console.error("Erreur lors de la récupération des réservations :", error);
       res.status(500).json({ message: "Erreur interne du serveur" });
