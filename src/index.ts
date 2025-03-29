@@ -2,9 +2,11 @@ import "reflect-metadata";
 import express from "express";
 import { AppDataSource } from "./config/database";
 import authRoutes from "./routes/auth.routes";
-import eventRoutes from "./routes/user/user.event.routes";
-import accountRoutes from "./routes/user/user.account.routes";
-import reservationRoutes from "./routes/user/user.reservation.routes";
+import userEventRoutes from "./routes/user/user.event.routes";
+import userAccountRoutes from "./routes/user/user.account.routes";
+import userReservationRoutes from "./routes/user/user.reservation.routes";
+import adminEventRoutes from "./routes/admin/admin.event.routes"
+import adminAccountRoutes from "./routes/admin/admin.account.routes";
 
 const app = express();
 app.use(express.json());
@@ -21,8 +23,10 @@ AppDataSource.initialize()
 app.use("/", authRoutes);
 
 //User side
-app.use("/api/user", eventRoutes);
-app.use("/api/user", accountRoutes);
-app.use("/api/user", reservationRoutes);
+app.use("/api/user", userEventRoutes);
+app.use("/api/user", userAccountRoutes);
+app.use("/api/user", userReservationRoutes);
 
 //Admin side
+app.use("/api/admin", adminEventRoutes);
+app.use("/api/admin", adminAccountRoutes);
