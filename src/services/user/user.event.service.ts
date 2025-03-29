@@ -36,7 +36,7 @@ export class EventService {
       .leftJoinAndSelect("event.image", "image")
       .where("event.event_date > NOW()")
       .andWhere("LOWER(event.title) LIKE LOWER(:title)", { title: `%${title}%` })
-      .andWhere("event.status = :status", { status: EventStatus.PUBLISHED })
+      .andWhere("event.status = :status", { status: EventStatus.PUBLISHED });
 
       const [events, total] = await query.getManyAndCount();  // getManyAndCount renvoie [data, totalCount]
       return [events, total];  // Données + Total

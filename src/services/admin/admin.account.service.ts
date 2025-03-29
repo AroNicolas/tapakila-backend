@@ -8,7 +8,7 @@ export class AccountService {
       .createQueryBuilder("account")
       .orderBy("account.name", "ASC")
       .skip((page - 1) * limit)
-      .take(limit)
+      .take(limit);
 
     const [accounts, total] = await query.getManyAndCount();  // getManyAndCount renvoie [data, totalCount]
     return [accounts, total];
