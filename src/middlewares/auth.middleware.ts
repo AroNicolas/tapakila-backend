@@ -26,10 +26,10 @@ export const authMiddleware = (requiredRole?: UserRole) => {
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as AuthPayload;
-      req.user = decoded; // Ajout de `req.user` correctement typé
+      req.user = decoded;
 
       // Vérification du rôle seulement si `requiredRole` est défini
-      if (requiredRole && req.user.role !== requiredRole) {
+      if (requiredRole === UserRole.ADMIN && req.user.role !== UserRole.ADMIN) {
         res.status(403).json({ message: "Accès interdit, rôle insuffisant." });
         return;
       }

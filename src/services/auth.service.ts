@@ -17,30 +17,28 @@ export class AuthService {
     return this.generateToken(newUser);
   }
 
-  static login = async (req: Request, res: Response) => {
-    const { email, password } = req.body;
-
+  static async login(email: string, password: string): Promise<string> {
     // Recherche l'utilisateur dans la bonne entité
     const userRepository = AppDataSource.getRepository(Account);
     const user = await userRepository.findOne({ where: { email } });
     if (!user) {
-      return res.status(400).json({ message: "Utilisateur non trouvé" });
+      throw new Error("Utilisateur non trouvé");
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Mot de passe incorrect" });
+      throw new Error("Mot de passe incorrect");
     }
 
     // Générer le token avec le rôle et autres informations
     const token = jwt.sign(
       { id: user.id_account, email: user.email, role: user.role },
-      process.env.JWT_SECRET!, 
-      { expiresIn: '1d' }
+      process.env.JWT_SECRET!,
+      { expiresIn: "1d" }
     );
 
-    res.json({ token });
-  };
+    return token;
+  }
 
   static generateToken(user: Account) {
     return jwt.sign({ id: user.id_account, role: user.role }, process.env.JWT_SECRET!, { expiresIn: "1d" });

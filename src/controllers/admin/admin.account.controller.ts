@@ -5,7 +5,8 @@ import { UserRole } from "../../entities/UserRole";
 export class AccountController {
   static async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
-      const { page, limit } = req.query;
+      const page = parseInt(req.query.page as string, 10) || 1;
+      const limit = parseInt(req.query.limit as string, 10) || 10;
       
       const [accounts, total] = await AccountService.getAllUsers(Number(page), Number(limit));
       res.json({
