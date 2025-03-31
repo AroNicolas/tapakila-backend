@@ -9,7 +9,7 @@ export class EventService {
       .createQueryBuilder("event")
       .leftJoinAndSelect("event.ticket_type", "ticket")
       .leftJoinAndSelect("event.image", "image")
-      .where("event.id = :id_event", { id_event })
+      .where("event.id_event = :id_event", { id_event })
       .andWhere("event.status = :status", { status: EventStatus.PUBLISHED })
       .getOne();
   }
