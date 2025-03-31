@@ -22,7 +22,7 @@ export class EventController {
 
   static async getAllOrFilteredEvents(req: Request, res: Response) {
     try {
-      const { date, location, category } = req.query;
+      const { date, location, category, title } = req.query;
       const page = parseInt(req.query.page as string, 10) || 1;
       const limit = parseInt(req.query.limit as string, 10) || 10;
 
@@ -30,22 +30,10 @@ export class EventController {
         location: location ? (location as string) : undefined,
         date: date ? (date as string) : undefined,
         category: category ? (category as string) : undefined,
+        title: title ? (title as string) : undefined,
       };
 
       const [events, total] = await EventService.getAllOrFilteredEvents(page, limit, filters);
-      res.json({
-        data: events,
-        total: total
-      });
-    } catch (error) {
-      res.status(500).json({ message: "Erreur interne du serveur" });
-    }
-  }
-
-  static async searchEventByTitle(req: Request, res: Response) {
-    try {
-      const { title } = req.params;
-      const [events, total] = await EventService.searchEventByTitle(title);
       res.json({
         data: events,
         total: total
