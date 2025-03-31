@@ -8,7 +8,7 @@ export class ReservationService {
       .createQueryBuilder("reservation")
       .leftJoinAndSelect("reservation.event", "event")
       .leftJoinAndSelect("reservation.account", "account")
-      .leftJoinAndSelect("reservation.reservation_tickets", "reservation_ticket")
+      .leftJoinAndSelect("reservation.reservation_ticket", "reservation_ticket")
       .leftJoinAndSelect("reservation_ticket.ticket_type", "ticket_type")
       .where("event.id_event = :id", { id })
       .orderBy("reservation.reserved_at", "DESC")

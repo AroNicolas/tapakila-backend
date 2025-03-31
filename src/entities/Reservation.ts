@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import { Account } from "./Account";
 import { ReservationStatus } from "./ReservationStatus";
 import { Event } from "./Event";
+import { ReservationTicket } from "./ReservationTicket";
 
 @Entity()
 export class Reservation {
@@ -19,4 +20,7 @@ export class Reservation {
 
     @ManyToOne(() => Event, event => event.id_event, { onDelete: "CASCADE" })
     event: Event;
+
+    @OneToMany(() => ReservationTicket, (rt) => rt.reservation)
+    reservation_ticket: ReservationTicket[];
 }

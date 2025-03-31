@@ -11,9 +11,9 @@ export class ReservationController {
       }
       
       const { id_reservation } = req.params;
-      const { id_account } = req.user; // Récupération de l'utilisateur connecté
+      const { id } = req.user; // Récupération de l'utilisateur connecté
 
-      const reservation = await ReservationService.cancelReservation(id_reservation, id_account);
+      const reservation = await ReservationService.cancelReservation(id_reservation, id);
       
       if (!reservation) {
         res.status(404).json({ message: "Réservation non trouvée." });

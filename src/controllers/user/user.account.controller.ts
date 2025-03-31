@@ -4,8 +4,9 @@ import { AccountService } from "../../services/user/user.account.service";
 export class AccountController {
   static async getProfile(req: Request, res: Response): Promise<void> {
     try {
-      const { id_account } = req.user!;
-      const profile = await AccountService.getProfile(id_account);
+      const { id } = req.user!;
+      
+      const profile = await AccountService.getProfile(id);
 
       if (!profile) {
         res.status(404).json({ message: "Profil non trouvé" });
@@ -20,7 +21,7 @@ export class AccountController {
 
   static async getFilteredPastReservations(req: Request, res: Response): Promise<void> {
     try {
-      const { id_account } = req.user!;
+      const { id } = req.user!;
       const { date, location, category } = req.query;
 
       const filters = {
@@ -29,7 +30,7 @@ export class AccountController {
         category: category ? (category as string) : undefined,
       };
 
-      const [reservations, total] = await AccountService.getFilteredPastReservations(id_account, filters);
+      const [reservations, total] = await AccountService.getFilteredPastReservations(id, filters);
       res.json({
         data: reservations,
         total: total
@@ -41,7 +42,7 @@ export class AccountController {
   
   static async getFilteredFutureReservations(req: Request, res: Response): Promise<void> {
     try {
-      const { id_account } = req.user!;
+      const { id } = req.user!;
       const { date, location, category } = req.query;
 
       const filters = {
@@ -50,7 +51,7 @@ export class AccountController {
         category: category ? (category as string) : undefined,
       };
 
-      const [reservations, total] = await AccountService.getFilteredFutureReservations(id_account, filters);
+      const [reservations, total] = await AccountService.getFilteredFutureReservations(id, filters);
       res.json({
         data: reservations,
         total: total

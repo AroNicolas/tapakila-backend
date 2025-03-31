@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { UserRole } from "../entities/UserRole";
 
 interface AuthPayload {
-  id_account: string;
+  id: string;
   role: UserRole;
 }
 

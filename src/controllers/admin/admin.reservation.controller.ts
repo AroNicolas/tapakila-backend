@@ -5,7 +5,8 @@ export class ReservationController {
   static async getReservationsByEvent(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const { page, limit } = req.query;
+      const page = parseInt(req.query.page as string, 10) || 1;
+      const limit = parseInt(req.query.limit as string, 10) || 10;
 
       const [reservations, total] = await ReservationService.getReservationsByEvent(id, Number(page), Number(limit));
       res.json({
