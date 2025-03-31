@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne} from "type
 import { EventCategory } from "./EventCategory";
 import { EventStatus } from "./EnventStatus";
 import { Image } from "./Image"; 
+import { TicketType } from "./TicketType";
 
 @Entity()
 export class Event {
@@ -31,4 +32,8 @@ export class Event {
 
   @OneToOne(() => Image, (image) => image.event, {cascade: true})
   image: Image;  
+
+  @OneToMany(() => TicketType, (ticketType) => ticketType.event)
+  ticket_type: TicketType[];
+
 }

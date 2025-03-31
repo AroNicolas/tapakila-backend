@@ -8,16 +8,16 @@ export class EventService {
   static async getEventById(id: string) {
     return await AppDataSource.getRepository(Event)
       .createQueryBuilder("event")
-      .leftJoinAndSelect("event.ticket_type", "ticket")
+      .leftJoinAndSelect("event.ticket_type", "ticket_type")
       .leftJoinAndSelect("event.image", "image")
-      .where("event.id = :id", { id })
+      .where("event.id_event = :id", { id })
       .getOne();
   }
 
   static async getAllOrFilteredEvents(page: number, limit: number, filters: { date?: string; location?: string; category?: string }) {
     const query = AppDataSource.getRepository(Event)
       .createQueryBuilder("event")
-      .leftJoinAndSelect("event.ticket_type", "ticket")
+      .leftJoinAndSelect("event.ticket_type", "ticket_type")
       .leftJoinAndSelect("event.image", "image");
   
     if (filters.date) query.andWhere("DATE(event.event_date) = :date", { date: filters.date });
@@ -31,9 +31,8 @@ export class EventService {
   static async searchEventByTitle(title: string) {
     const query =  AppDataSource.getRepository(Event)
       .createQueryBuilder("event")
-      .leftJoinAndSelect("event.ticket_type", "ticket")
+      .leftJoinAndSelect("event.ticket_type", "ticket_type")
       .leftJoinAndSelect("event.image", "image")
-      .where("event.event_date > NOW()")
       .andWhere("LOWER(event.title) LIKE LOWER(:title)", { title: `%${title}%` })
       .andWhere("event.status = :status", { status: EventStatus.PUBLISHED });
 
