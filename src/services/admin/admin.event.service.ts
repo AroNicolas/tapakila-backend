@@ -52,8 +52,14 @@ export class EventService {
     // Ajout de l'image si elle existe
     if (eventData.image) {
       // Crée l'image et associe-la à l'événement
-      const image = imageRepository.create({ url: eventData.image.url, event: newEvent });
-      await imageRepository.save(image);
+      let image = imageRepository.create({ url: eventData.image.url });
+
+      if (!image) {
+        // Si l'image n'existe pas, on la crée
+        image = imageRepository.create({ url: eventData.image.url, event: newEvent });
+        await imageRepository.save(image);
+      }
+
       newEvent.image = image; // Associer l'image à l'événement
     }
   
