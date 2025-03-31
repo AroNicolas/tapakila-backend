@@ -4,6 +4,12 @@ import { ReservationService } from "../../services/user/user.reservation.service
 export class ReservationController {
   static async cancelReservation(req: Request, res: Response): Promise<void> {
     try {
+
+      if (!req.user) {
+        res.status(401).json({ message: "Utilisateur non authentifié." });
+        return;
+      }
+      
       const { id_reservation } = req.params;
       const { id_account } = req.user; // Récupération de l'utilisateur connecté
 

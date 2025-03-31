@@ -1,13 +1,9 @@
-declare namespace Express {
-    export interface Request {
-      user: any; // Ajout de la propriété `user`
+import { Account } from "../entities/Account";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: Account | { id_account: string; role: string };
     }
   }
-
-  declare global {
-    namespace Express {
-      interface Request {
-        user?: { id_account: string; role: string };
-      }
-    }
-  }   
+}

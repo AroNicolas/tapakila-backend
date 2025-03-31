@@ -11,8 +11,9 @@
     "strictPropertyInitialization": false,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "types": ["node", "express"]
   },
-  "include": ["src"],
+  "include": ["src/**/*.ts", "src/types/express.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
