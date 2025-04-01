@@ -9,13 +9,7 @@
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.21"
   },
-  "type": "module",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    }
-  },
+  "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
