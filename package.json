@@ -9,7 +9,7 @@
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.21"
   },
-  "main": "./dist/index.js",
+  "type": "commonjs",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
