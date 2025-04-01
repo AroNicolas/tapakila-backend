@@ -13,6 +13,6 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME || "tapakila",
   entities: ["src/entities/**/*.ts"],
   migrations: ["src/migrations/**/*.ts"],
-  synchronize: true, // ⚠️ Mettre sur `false` en production
-  logging: true,
+  synchronize: false, // ⚠️ Mettre sur `false` en production
+  logging: false,
 });
