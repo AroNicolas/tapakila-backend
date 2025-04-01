@@ -14,6 +14,6 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD || "123456",
   database: process.env.DB_NAME || "tapakila",
   entities: [path.join(__dirname, "../entities/**/*.{js,ts}")],
-  synchronize: false,
+  synchronize: true,
   logging: false
 });
