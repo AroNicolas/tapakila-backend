@@ -23,6 +23,8 @@ export class AccountController {
     try {
       const { id } = req.user!;
       const { date, location, category } = req.query;
+      const page = parseInt(req.query.page as string, 10) || 1;
+      const limit = parseInt(req.query.limit as string, 10) || 10;
 
       const filters = {
         location: location ? (location as string) : undefined,
@@ -30,7 +32,7 @@ export class AccountController {
         category: category ? (category as string) : undefined,
       };
 
-      const [reservations, total] = await AccountService.getFilteredPastReservations(id, filters);
+      const [reservations, total] = await AccountService.getFilteredPastReservations(id, page, limit, filters);
       res.json({
         data: reservations,
         total: total
@@ -44,6 +46,8 @@ export class AccountController {
     try {
       const { id } = req.user!;
       const { date, location, category } = req.query;
+      const page = parseInt(req.query.page as string, 10) || 1;
+      const limit = parseInt(req.query.limit as string, 10) || 10;
 
       const filters = {
         location: location ? (location as string) : undefined,
@@ -51,7 +55,7 @@ export class AccountController {
         category: category ? (category as string) : undefined,
       };
 
-      const [reservations, total] = await AccountService.getFilteredFutureReservations(id, filters);
+      const [reservations, total] = await AccountService.getFilteredFutureReservations(id, page, limit, filters);
       res.json({
         data: reservations,
         total: total
