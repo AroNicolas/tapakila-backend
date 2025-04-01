@@ -10,7 +10,8 @@
     "typeorm": "^0.3.21"
   },
 "scripts": {
-  "start": "nodemon --exec ts-node src/index.ts",
+  "build": "tsc",
+  "start": "node dist/server.js",
   "dev": "ts-node-dev --respawn src/index.ts"
 },
   "devDependencies": {
