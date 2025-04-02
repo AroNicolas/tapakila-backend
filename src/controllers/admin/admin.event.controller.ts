@@ -45,31 +45,31 @@ export class EventController {
 
   static async createEvent(req: Request, res: Response): Promise<void> {
     try {
-      const { title, description, event_date, location, organizer, category, status } = req.body;
-      const imageFile = req.file; // Récupérer l'image envoyée via `multer`
+        const { title, description, event_date, location, organizer, category, status } = req.body;
+        const imageFile = req.file; // Récupérer l'image envoyée via `multer`
 
-      // Construire l'objet image avec l'url du fichier téléchargé (si un fichier est envoyé)
-      const image = imageFile ? { url: `uploads/${imageFile.filename}` } as Image & { url: string } : undefined;
+        // Vérifier si un fichier a été uploadé et récupérer son URL Cloudinary
+        const imageUrl = imageFile ? (imageFile as any).path : undefined;  
 
-      // Appeler le service avec les données de l'événement et l'image
-      const event = await EventService.createEvent({
-        title,
-        description,
-        event_date: new Date(event_date),
-        location,
-        organizer,
-        category,
-        status,
-        image // Passer l'objet image avec l'URL
-      });
-      
+        // Appeler le service avec les données de l'événement et l'image
+        const event = await EventService.createEvent({
+            title,
+            description,
+            event_date: new Date(event_date),
+            location,
+            organizer,
+            category,
+            status,
+            image: imageUrl ? { url: imageUrl } as Image & { url: string } : undefined, // Utiliser l'URL Cloudinary
+        });
 
-      res.status(201).json(event);
+        res.status(201).json(event);
     } catch (error) {
-      console.error("Erreur lors de la création de l'événement:", error);
-      res.status(500).json({ message: "Erreur interne du serveur" });
+        console.error("Erreur lors de la création de l'événement:", error);
+        res.status(500).json({ message: "Erreur interne du serveur" });
     }
-  }
+}
+
 
   static async updateEvent(req: Request, res: Response): Promise<void> {
     try {

@@ -1,30 +1,31 @@
 import multer from "multer";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import dotenv from "dotenv";
 import { v4 as uuidv4 } from "uuid";
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = uuidv4();
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+dotenv.config();
+
+// Configuration Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Configuration du stockage Multer avec Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: async (req, file) => {
+    const uniqueSuffix = uuidv4(); // Générer un identifiant unique
+    return {
+      folder: "event_images", // Dossier de stockage sur Cloudinary
+      format: file.mimetype.split("/")[1], // Utiliser le format du fichier
+      public_id: `${uniqueSuffix}`, // Nom du fichier unique
+    };
   },
 });
 
-// Accepter uniquement les fichiers image
-const upload = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Type de fichier non autorisé'));
-    }
-  }
-});
-
+const upload = multer({ storage });
 
 export default upload;
-
