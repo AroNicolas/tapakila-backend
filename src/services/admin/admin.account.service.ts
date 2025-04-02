@@ -14,7 +14,7 @@ export class AccountService {
     return [accounts, total];
   }
 
-  static async getUserByName(name: string) {
+  static async getUserByName(name?: string) {
     return await AppDataSource.getRepository(Account)
       .createQueryBuilder("user")
       .where("LOWER(user.name) LIKE LOWER(:name)", { name: `%${name}%` })
