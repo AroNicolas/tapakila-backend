@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import express from "express";
+import cors from "cors";
 import { AppDataSource } from "./config/database";
 import authRoutes from "./routes/auth.routes";
 import userEventRoutes from "./routes/user/user.event.routes";
@@ -12,6 +13,7 @@ import adminReservationRoutes from "./routes/admin/admin.reservation.routes";
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const PORT = process.env.PORT || 10000;
 
