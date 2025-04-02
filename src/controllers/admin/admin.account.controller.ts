@@ -3,6 +3,24 @@ import { AccountService } from "../../services/admin/admin.account.service";
 import { UserRole } from "../../entities/UserRole";
 
 export class AccountController {
+  
+  static async getUserById(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      
+      const profile = await AccountService.getUserById(id);
+
+      if (!profile) {
+        res.status(404).json({ message: "Profil non trouvé" });
+        return;
+      }
+
+      res.json(profile);
+    } catch (error) {
+      res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+  }
+  
   static async getAllUsersFiltered(req: Request, res: Response): Promise<void> {
     try {
       const name = req.query.name as string | undefined;

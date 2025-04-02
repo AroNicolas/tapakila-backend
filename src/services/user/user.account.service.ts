@@ -5,8 +5,7 @@ import { Reservation } from "../../entities/Reservation";
 export class AccountService {
   static async getProfile(id: string) {
     return await AppDataSource.getRepository(Account)
-      .findOne({ where: { id_account: id }, select: ["name", "email", "account_creation_date"] });
-      
+      .findOne({ where: { id_account: id }, select: ["name", "email", "account_creation_date"] });    
   }
 
   static async getFilteredPastReservations(id: string, page: number, limit: number, filters: { date?: string; location?: string; category?: string }) {

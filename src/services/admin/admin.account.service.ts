@@ -3,6 +3,12 @@ import { Account } from "../../entities/Account";
 import { UserRole } from "../../entities/UserRole";
 
 export class AccountService {
+  
+  static async getUserById(id: string) {
+    return await AppDataSource.getRepository(Account)
+      .findOne({ where: { id_account: id }, select: ["id_account","name", "email", "account_creation_date", "role"] });    
+  }
+  
   static async getAllUsersFiltered(page: number, limit: number, name?: string) {
     const query = AppDataSource.getRepository(Account)
       .createQueryBuilder("account")

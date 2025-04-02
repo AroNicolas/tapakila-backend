@@ -5,6 +5,7 @@ import { UserRole } from "../../entities/UserRole";
 
 const router = Router();
 
+router.get("/account/:id", authMiddleware(UserRole.ADMIN), AccountController.getUserById);
 router.get("/account", authMiddleware(UserRole.ADMIN), AccountController.getAllUsersFiltered);
 router.patch("/account/:id/:role", authMiddleware(UserRole.ADMIN), AccountController.setUserRole);
 
