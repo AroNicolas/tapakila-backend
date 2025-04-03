@@ -23,7 +23,7 @@ export class ReservationService {
     return reservation;
   }
 
-  static async createReservation(id: string,id_event: string,tickets: { id_ticket: string; quantity: number }[]): Promise<Reservation | null> {
+  static async createReservation(id: string, id_event: string, tickets: { id_ticket: string; quantity: number }[]): Promise<Reservation | null> {
     const reservationRepo = AppDataSource.getRepository(Reservation);
     const eventRepo = AppDataSource.getRepository(Event);
     const ticketRepo = AppDataSource.getRepository(TicketType);
@@ -40,8 +40,13 @@ export class ReservationService {
     });
     await reservationRepo.save(reservation);
 
+    const parsedTickets = typeof tickets === "string" ? JSON.parse(tickets) : tickets;
+    if (!Array.isArray(parsedTickets)) {
+      throw new Error("Format des tickets invalide, un tableau est attendu.");
+    }
+    
     // Ajouter les tickets
-    for (const { id_ticket, quantity } of tickets) {
+    for (const { id_ticket, quantity } of parsedTickets) {
       const ticketType = await ticketRepo.findOne({ where: { id_ticket } });
       if (!ticketType) throw new Error(`Ticket type ${id_ticket} introuvable`);
 
