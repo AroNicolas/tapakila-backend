@@ -13,6 +13,7 @@ export class AccountService {
       .leftJoinAndSelect("reservation.event", "event")
       .leftJoinAndSelect("reservation.reservation_ticket", "reservation_ticket")
       .leftJoinAndSelect("reservation_ticket.ticket_type", "ticket_type")
+      .leftJoinAndSelect("event.image", "image")
       .where("reservation.accountIdAccount = :id_account", { id_account: id })
       .andWhere("event.event_date < NOW()");
 
@@ -29,6 +30,7 @@ export class AccountService {
       .leftJoinAndSelect("reservation.event", "event")
       .leftJoinAndSelect("reservation.reservation_ticket", "reservation_ticket")
       .leftJoinAndSelect("reservation_ticket.ticket_type", "ticket_type")
+      .leftJoinAndSelect("event.image", "image")
       .where("reservation.accountIdAccount = :id_account", { id_account: id })
       .andWhere("event.event_date > NOW()");
 
