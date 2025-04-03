@@ -26,4 +26,24 @@ export class ReservationController {
       res.status(500).json({ message: "Erreur interne du serveur" });
     }
   }
+
+  static async createReservation(req: Request, res: Response): Promise<void> {
+    try {
+      const id_event = req.params.id_event;
+      const { id } = req.user!; // Récupération du user via le middleware d'authentification
+      const { tickets } = req.body; // Liste des tickets { id_ticket, quantity }
+
+      if (!id) {
+        res.status(401).json({ message: "Utilisateur non authentifié." });
+        return;
+      }
+
+      const reservation = await ReservationService.createReservation(id, id_event, tickets);
+
+      res.status(201).json(reservation);
+    } catch (error) {
+      console.error("Erreur lors de la création de la réservation:", error);
+      res.status(500).json({ message: "Erreur interne du serveur." });
+    }
+  }
 }
